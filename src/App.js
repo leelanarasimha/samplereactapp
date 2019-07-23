@@ -1,26 +1,42 @@
-import React from 'react';
+import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+import Student from './components/Student/Student';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+class App extends Component {
+  state= {
+    students: [
+      {name: 'Devender', age: 35},
+      {name: 'Leela', age: 35},
+    ]
+  }
+  
+  render() {
+    return (
+      <div>
+        <Header></Header>
+        <hr/>
+        <Student details={this.state.students[0]} ></Student>
+        <hr/>
+        <Student details={this.state.students[1]}></Student>
+        <hr/>
+        <button onClick={this.changeDevaName}>Click Here</button>
+        <Footer></Footer>
     </div>
-  );
+    )
+  }
+
+  changeDevaName = () => {
+    this.setState({
+      students: [
+        {name: 'Deva', age: 35},
+        {name: 'Narasimha', age: 35},
+      ]
+    })
+  }
 }
 
 export default App;
