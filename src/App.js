@@ -11,22 +11,33 @@ class App extends Component {
     students: [
       {name: 'Devender', age: 35},
       {name: 'Leela', age: 35},
-    ]
+    ],
+    showStudents: false,
   }
   
   render() {
     return (
       <div>
         <Header></Header>
+        <button onClick={this.toggleStudentsHandler}>Toggle Students</button>
         <hr/>
+
+        { this.state.showStudents ? 
+        <div>
         <Student details={this.state.students[0]} ></Student>
         <hr/>
         <Student details={this.state.students[1]}></Student>
         <hr/>
         <button onClick={this.changeDevaName}>Click Here</button>
+        </div> : null
+      }
+
         <Footer></Footer>
     </div>
     )
+  }
+  toggleStudentsHandler = () => {
+    this.setState({showStudents: !this.state.showStudents})
   }
 
   changeDevaName = () => {
