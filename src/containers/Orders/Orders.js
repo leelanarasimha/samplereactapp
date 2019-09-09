@@ -26,11 +26,20 @@ class Orders extends Component {
     }
 
     render() {
-       
+        let ordersdata = [];
+        if (this.state.orders) {
+            
+        for (let value of this.state.orders) {
+            console.log(value);
+            ordersdata.push(<Order key={value.id} 
+                ingredients={value.ingredients} price={+value.totalprice}/>)
+        }
+        
+    }
+    
         return (
             <div>
-
-                <Order/>
+                {ordersdata}
             </div>
         );
     }
