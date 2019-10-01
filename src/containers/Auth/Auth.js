@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
+import * as actions from '../../store/actions/index';
 
 
 
-export default class Auth extends Component {
+
+ class Auth extends Component {
     state = {
         controls: {
             email: {
@@ -83,6 +85,12 @@ export default class Auth extends Component {
         this.setState({controls: updatedControls});
     }
 
+    onSubmitHandler = (event) => {
+        event.preventDefault();
+        this.props.auth(this.state.controls.email.value, this.state.controls.password.value);
+    }
+
+
     render() {
         let formElements = [];
         for (let key in this.state.controls) {
@@ -109,7 +117,7 @@ export default class Auth extends Component {
 
 
         return (
-            <form>
+            <form onSubmit={this.onSubmitHandler}>
                 {form}
                 <Button btnType="Success">SUBMIT</Button>
             </form>
@@ -117,3 +125,11 @@ export default class Auth extends Component {
         );
     }   
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        auth: (email, password) => dispatch(actions.Auth(email, password)) 
+    }
+}
+
+export default Auth;
