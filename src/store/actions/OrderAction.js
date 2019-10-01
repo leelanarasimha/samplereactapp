@@ -34,3 +34,50 @@ export const burgerPurchase = (orderdata) => {
             } );
     }
 }
+
+export const onInitPurchase = () => {
+    return {
+        type: actionTypes.PURCHASE_INIT
+    }
+}
+
+
+export const orderFetchStart = () => {
+    return {
+        type: actionTypes.FETCH_ORDERS_START
+    }
+}
+
+export const orderFetchSuccess = (orders) => {
+    return {
+        type: actionTypes.FETCH_ORDERS_SUCCESS,
+        orders: orders
+    }
+}
+
+export const orderFetchFail = (error) => {
+    return {
+        type: actionTypes.FETCH_ORDERS_FAIL,
+        error: error
+    }
+}
+
+export const orderFetch = () => {
+    return dispatch => {
+        dispatch(orderFetchStart());
+        axios.get('/orders.json')
+            .then(res => {
+                const fetchedOrders = [];
+                for (let key in res.data) {
+                    fetchedOrders.push({
+                        ...res.data[key],
+                        id: key
+                    });
+                }
+                dispatch(orderFetchSuccess(fetchedOrders));
+            })
+            .catch(err => {
+                dispatch(orderFetchFail(err));
+            });
+    }
+}
