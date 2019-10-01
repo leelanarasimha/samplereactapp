@@ -6,4 +6,4 @@ export {
 
 export {burgerPurchase, onInitPurchase, orderFetch} from '../actions/OrderAction';
 
-export {auth} from '../actions/AuthAction';
+export {Auth} from '../actions/AuthAction';

@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import * as actions from '../../store/actions/index';
-
-
+import {connect} from 'react-redux';
 
 
  class Auth extends Component {
@@ -37,7 +36,8 @@ import * as actions from '../../store/actions/index';
                 valid: false,
                 touched: false
             },
-        }
+        },
+        isSignUp: true
     };
 
     checkValidity(value, rules) {
@@ -87,7 +87,14 @@ import * as actions from '../../store/actions/index';
 
     onSubmitHandler = (event) => {
         event.preventDefault();
-        this.props.auth(this.state.controls.email.value, this.state.controls.password.value);
+        this.props.auth(this.state.controls.email.value, 
+            this.state.controls.password.value, this.state.isSignUp);
+    }
+
+    switchAuthHandler = () => {
+        this.setState(prevState => {
+            return {isSignUp: !prevState.isSignUp}
+        })
     }
 
 
@@ -117,10 +124,15 @@ import * as actions from '../../store/actions/index';
 
 
         return (
+            <div>
+                <h3>{(this.state.isSignUp) ? 'SignUp' : 'SignIn'}</h3>
             <form onSubmit={this.onSubmitHandler}>
                 {form}
                 <Button btnType="Success">SUBMIT</Button>
             </form>
+
+            <Button btnType="Danger" clicked={this.switchAuthHandler}>SWITCH TO {this.state.isSignUp ? 'SIGNIN' : 'SIGNUP'}</Button>
+            </div>
 
         );
     }   
@@ -128,8 +140,8 @@ import * as actions from '../../store/actions/index';
 
 const mapDispatchToProps = dispatch => {
     return {
-        auth: (email, password) => dispatch(actions.Auth(email, password)) 
+        auth: (email, password, issignup) => dispatch(actions.Auth(email, password, issignup)) 
     }
 }
 
-export default Auth;
+export default connect(null, mapDispatchToProps)(Auth);
