@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
+import {Redirect} from 'react-router-dom';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import * as actions from '../../store/actions/index';
 import {connect} from 'react-redux';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 
  class Auth extends Component {
@@ -107,7 +109,7 @@ import {connect} from 'react-redux';
             });
         }
 
-        const form = formElements.map(formElement => {
+        let form = formElements.map(formElement => {
             return (
                 <Input 
                 key={formElement.id}
@@ -121,10 +123,28 @@ import {connect} from 'react-redux';
             );
         });
 
+        if (this.props.loading) {
+            form = <Spinner/>;
+        }
+
+        let errorText = '';
+
+        if (this.props.error) {
+            errorText = <p>{this.props.error.message}</p>
+        }
+
+        let redirectTo = null;
+        if (this.props.isAuthenticated) {
+            redirectTo = <Redirect to="/"/>
+
+        }
+
 
 
         return (
             <div>
+                {redirectTo}
+                {errorText}
                 <h3>{(this.state.isSignUp) ? 'SignUp' : 'SignIn'}</h3>
             <form onSubmit={this.onSubmitHandler}>
                 {form}
@@ -138,10 +158,18 @@ import {connect} from 'react-redux';
     }   
 }
 
+const mapStateToProps = (state) => {
+    return {
+        loading: state.auth.loading,
+        error: state.auth.error,
+        isAuthenticated: state.auth.token !== null
+    }
+};
+
 const mapDispatchToProps = dispatch => {
     return {
         auth: (email, password, issignup) => dispatch(actions.Auth(email, password, issignup)) 
     }
 }
 
-export default connect(null, mapDispatchToProps)(Auth);
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);
