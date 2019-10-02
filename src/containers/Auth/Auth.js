@@ -73,6 +73,13 @@ import Spinner from '../../components/UI/Spinner/Spinner';
         return isValid;
     }
 
+    componentDidMount() {
+        console.log('auth js');
+        if (!this.props.building && this.props.authRedirectPath !== '/') {
+            this.props.setAuthRedirectPath();
+        }
+    }
+
     inputChangedHandler(event, controlName) {
         const updatedControls = {
             ...this.state.controls,
@@ -81,7 +88,6 @@ import Spinner from '../../components/UI/Spinner/Spinner';
                 value: event.target.value,
                 valid: this.checkValidity(event.target.value, this.state.controls[controlName].validation),
                 touched: true
-
             }
         }
         this.setState({controls: updatedControls});
@@ -136,7 +142,6 @@ import Spinner from '../../components/UI/Spinner/Spinner';
         let redirectTo = null;
         if (this.props.isAuthenticated) {
             redirectTo = <Redirect to="/"/>
-
         }
 
 
@@ -162,13 +167,16 @@ const mapStateToProps = (state) => {
     return {
         loading: state.auth.loading,
         error: state.auth.error,
-        isAuthenticated: state.auth.token !== null
+        isAuthenticated: state.auth.token !== null,
+        authRedirectPath: state.auth.authRedirectPath,
+        building: state.burgerbuilder.building
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        auth: (email, password, issignup) => dispatch(actions.Auth(email, password, issignup)) 
+        auth: (email, password, issignup) => dispatch(actions.Auth(email, password, issignup)),
+        setAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/'))        
     }
 }
 
